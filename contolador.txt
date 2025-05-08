@@ -1,0 +1,112 @@
+1. index()
+Este método se utiliza para mostrar una lista de todos los recursos (por ejemplo, tareas). Generalmente, se hace una consulta a la base de datos para obtener todos los registros del modelo y luego se pasan a una vista.
+
+Ejemplo:
+
+php
+Copiar
+Editar
+public function index()
+{
+    $tasks = Task::all();  // Obtener todas las tareas
+    return view('tasks.index', compact('tasks'));  // Pasar las tareas a la vista
+}
+Función: Muestra una lista de todos los recursos (en este caso, tareas).
+
+2. create()
+Este método se utiliza para mostrar un formulario de creación. No recibe ningún dato, solo devuelve una vista con un formulario vacío para crear un nuevo recurso (como una tarea).
+
+Ejemplo:
+
+php
+Copiar
+Editar
+public function create()
+{
+    return view('tasks.create');  // Mostrar el formulario de creación
+}
+Función: Muestra un formulario para crear un nuevo recurso.
+
+3. store()
+Este método se usa para almacenar un nuevo recurso en la base de datos. Recibe los datos enviados desde el formulario de creación (POST), los valida y luego guarda el nuevo recurso.
+
+Ejemplo:
+
+php
+Copiar
+Editar
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+    ]);
+
+    Task::create($data);  // Guardar los datos en la base de datos
+
+    return redirect()->route('tasks.index');  // Redirigir a la lista de tareas
+}
+Función: Recibe los datos del formulario, valida y guarda el nuevo recurso en la base de datos.
+
+4. show()
+Este método se usa para mostrar un único recurso, generalmente mediante una vista detallada. Recibe el ID del recurso, lo busca en la base de datos y lo pasa a una vista.
+
+Ejemplo:
+
+php
+Copiar
+Editar
+public function show(Task $task)
+{
+    return view('tasks.show', compact('task'));  // Mostrar una vista con los detalles de la tarea
+}
+Función: Muestra los detalles de un solo recurso.
+
+5. edit()
+Este método se utiliza para mostrar un formulario de edición de un recurso existente. Recibe el ID del recurso, lo busca en la base de datos y pasa los datos a la vista de edición para que el usuario pueda modificarlos.
+
+Ejemplo:
+
+php
+Copiar
+Editar
+public function edit(Task $task)
+{
+    return view('tasks.edit', compact('task'));  // Mostrar formulario con datos existentes
+}
+Función: Muestra un formulario para editar un recurso existente.
+
+6. update()
+Este método se utiliza para actualizar un recurso existente en la base de datos. Recibe los datos enviados desde el formulario de edición (PUT o PATCH), valida los datos y luego actualiza el registro correspondiente.
+
+Ejemplo:
+
+php
+Copiar
+Editar
+public function update(Request $request, Task $task)
+{
+    $data = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+    ]);
+
+    $task->update($data);  // Actualizar el registro con los nuevos datos
+
+    return redirect()->route('tasks.index');  // Redirigir a la lista de tareas
+}
+Función: Recibe los datos actualizados del formulario, valida y actualiza el recurso en la base de datos.
+
+7. destroy()
+Este método se usa para eliminar un recurso de la base de datos. Recibe el ID del recurso y, después de verificar que existe, lo elimina.
+
+Ejemplo:
+
+php
+Copiar
+Editar
+public function destroy(Task $task)
+{
+    $task->delete();  // Eliminar el recurso de la base de datos
+
+    return redirect()->route('tasks.index');  // Redirigir a la lista de tareas
